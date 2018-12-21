@@ -3,7 +3,7 @@ import json
 three_char_particles = ["くらい", "ばかり"]
 two_char_particles = ["から", "より", "まで", "だけ", "ほど", "など", "なり", "やら", "こそ", "でも", "しか", "さえ", "だに"]
 one_char_particles = ["が", "の", "を", "に", "へ", "と", "で", "は", "も"]
-common_mistakes = ["ですが", "もしく", "です", "とって", "にて"]
+common_mistakes = ["ですが", "もしく", "です", "とって", "にて", "でした", "では"]
 
 start_file = 1
 end_file = 40
