@@ -3,6 +3,7 @@ import json
 three_char_particles = ["くらい", "ばかり"]
 two_char_particles = ["から", "より", "まで", "だけ", "ほど", "など", "なり", "やら", "こそ", "でも", "しか", "さえ", "だに"]
 one_char_particles = ["が", "の", "を", "に", "へ", "と", "で", "は", "も"]
+common_mistakes = ["ですが", "もしく", "です"]
 
 def load_documents(file_address):
     data = []
@@ -22,22 +23,18 @@ def check_particles(document, j):
     text_length = len(current_text)
     current_noun = str(document["annotations"]["key_phrase"][j]["extent"])
     if current_noun in current_text:
-        # print(current_noun + " is in the text") #REMOVE LATER
         char_number = int(document["annotations"]["key_phrase"][j]["end"])
         if char_number+2 < text_length:
             following_three = current_text[char_number] + current_text[char_number+1] + current_text[char_number+2]
             if following_three in three_char_particles:
-                #print(following_three) remove later
                 return modify_keyphrase(document, j, current_noun, char_number, following_three, 3)
         if char_number+1 < text_length:
             following_two = current_text[char_number] + current_text[char_number+1]
             if following_two in two_char_particles:
-                #print(following_two) remove later
                 return modify_keyphrase(document, j, current_noun, char_number, following_two, 2)
         if char_number < text_length:
             following_one = current_text[char_number]
             if following_one in one_char_particles:
-                #print(following_one) remove later
                 return modify_keyphrase(document, j, current_noun, char_number, following_one, 1)
     return document #Noun not in text or no particle found; return original dict
 
