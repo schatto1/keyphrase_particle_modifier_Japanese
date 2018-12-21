@@ -5,6 +5,9 @@ two_char_particles = ["から", "より", "まで", "だけ", "ほど", "など"
 one_char_particles = ["が", "の", "を", "に", "へ", "と", "で", "は", "も"]
 common_mistakes = ["ですが", "もしく", "です", "とって", "にて"]
 
+start_file = 1
+end_file = 40
+
 def load_documents(file_address):
     data = []
     with open(file_address) as current_file:
@@ -47,24 +50,27 @@ def modify_keyphrase(document, j, current_noun, char_number, following_text, num
     document["annotations"]["key_phrase"][j]["end"] = char_number + number
     return document #dict
 
+def main(file_address, output_address):
+    # MAIN SCRIPT STARTS HERE
+    data = load_documents(file_address)
+    open(output_address, "w").close()
 
-# MAIN SCRIPT STARTS HERE
-file_address = "./test_SC/complete/Japanese_KP_1120_part1_SC.json"
-output_address = "./test_SC/complete/Japanese_KP_1120_part1_SC_fixed.json"
-data = load_documents(file_address)
-open(output_address, "w").close()
+    # Iterate through each document in file
+    for i in range(len(data)):
+        document = json.loads(data[i])
 
-# Iterate through each document in file
-for i in range(len(data)):
-    document = json.loads(data[i])
+        # Skip first JSON object that's not annotations
+        if "maxRead" in document:
+            append_to_file(output_address, document)
+            continue
 
-    # Skip first JSON object that's not annotations
-    if "maxRead" in document:
+        # Iterate through each annotation in document
+        key_phrase_length = len(document["annotations"]["key_phrase"])
+        for j in range(key_phrase_length):
+            document = check_particles(document, j)
         append_to_file(output_address, document)
-        continue
 
-    # Iterate through each annotation in document
-    key_phrase_length = len(document["annotations"]["key_phrase"])
-    for j in range(key_phrase_length):
-        document = check_particles(document, j)
-    append_to_file(output_address, document)
+for count in range(start_file, end_file):
+    file_address = "./test_SC/complete/Japanese_KP_1120_part" + str(count) + "_SC.json"
+    output_address = "./test_SC/fixed/Japanese_KP_1120_part" + str(count) + "_SC.json"
+    main(file_address, output_address)
