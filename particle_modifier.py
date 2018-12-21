@@ -2,7 +2,7 @@ import json
 
 three_char_particles = ["くらい", "ばかり"]
 two_char_particles = ["から", "より", "まで", "だけ", "ほど", "など", "なり", "やら", "こそ", "でも", "しか", "さえ", "だに"]
-one_char_particles = ["が", "の", "を", "に", "へ", "と", "で", "は", "も"]
+one_char_particles = ["が", "の", "を", "に", "へ", "と", "で", "は", "も", "等", "位"]
 common_mistakes = ["ですが", "もしく", "です", "とって", "にて", "でした", "では", "のみ", "のに", "ので", "やら", "なり", "だの", "とも", "かしら", "ところが", "けれども"]
 
 start_file = 1
@@ -64,13 +64,14 @@ def main(file_address, output_address):
             continue
 
         # Iterate through each annotation in document
-        key_phrase_length = len(document["annotations"]["key_phrase"])
-        for j in range(key_phrase_length):
-            document = check_particles(document, j)
+        if bool(document["annotations"]):
+            key_phrase_length = len(document["annotations"].get("key_phrase"))
+            for j in range(key_phrase_length):
+                document = check_particles(document, j)
         append_to_file(output_address, document)
 
 # MAIN SCRIPT STARTS HERE
-for count in range(start_file, end_file):
+for count in range(40, 41):
     file_address = "./test_SC/complete/Japanese_KP_1120_part" + str(count) + "_SC.json"
     output_address = "./test_SC/fixed/Japanese_KP_1120_part" + str(count) + "_SC.json"
     main(file_address, output_address)
