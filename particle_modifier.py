@@ -3,7 +3,7 @@ import json
 three_char_particles = ["くらい", "ばかり"]
 two_char_particles = ["から", "より", "まで", "だけ", "ほど", "など", "なり", "やら", "こそ", "でも", "しか", "さえ", "だに"]
 one_char_particles = ["が", "の", "を", "に", "へ", "と", "で", "は", "も"]
-common_mistakes = ["ですが", "もしく", "です"]
+common_mistakes = ["ですが", "もしく", "です", "とって", "にて"]
 
 def load_documents(file_address):
     data = []
@@ -26,11 +26,15 @@ def check_particles(document, j):
         char_number = int(document["annotations"]["key_phrase"][j]["end"])
         if char_number+2 < text_length:
             following_three = current_text[char_number] + current_text[char_number+1] + current_text[char_number+2]
-            if following_three in three_char_particles:
+            if following_three in common_mistakes:
+                return document
+            elif following_three in three_char_particles:
                 return modify_keyphrase(document, j, current_noun, char_number, following_three, 3)
         if char_number+1 < text_length:
             following_two = current_text[char_number] + current_text[char_number+1]
-            if following_two in two_char_particles:
+            if following_two in common_mistakes:
+                return document
+            elif following_two in two_char_particles:
                 return modify_keyphrase(document, j, current_noun, char_number, following_two, 2)
         if char_number < text_length:
             following_one = current_text[char_number]
