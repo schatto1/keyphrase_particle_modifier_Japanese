@@ -12,8 +12,8 @@ def load_documents(file_address):
     return data #string
 
 def append_to_file(file_address, document):
-    with open(file_address, "a") as outfile:
-        json.dump(document, outfile)
+    with open(file_address, "a", encoding="utf8") as outfile:
+        json.dump(document, outfile, ensure_ascii=False)
         outfile.write("\n")
 
 def check_particles(document, j):
